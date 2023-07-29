@@ -51,7 +51,10 @@ struct Node
   std::mutex* node_mutex;
   Node(int val)
 	: value(val), next(nullptr)
-  {}
+  {
+    node_mutex=new mutex;
+  }
+  ~Node(){delete node_mutex;}
 };
 
 class FineGrainedQueue
@@ -61,7 +64,9 @@ class FineGrainedQueue
 public:
   FineGrainedQueue()
   	:head(nullptr)
-  {}
+  {
+    queue_mutex=new mutex;
+  }
 
   ~FineGrainedQueue(){
     cout << "~" << endl;
@@ -82,7 +87,8 @@ public:
       prev->node_mutex->unlock();
       delete prev;
     }
-    queue_mutex->unlock();    
+    queue_mutex->unlock(); 
+    delete queue_mutex;   
   }
 
 public:
